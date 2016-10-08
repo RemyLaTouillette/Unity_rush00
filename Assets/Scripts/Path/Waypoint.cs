@@ -9,7 +9,7 @@ public class Waypoint : MonoBehaviour {
 
 	void Awake()
 	{
-		Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, 1.1f);
+		Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, overlapRadius);
 		int i = 0;
 		while (i < hits.Length) {
 			if (hits[i].gameObject.tag == "Waypoint" && hits[i].transform.position != transform.position)
