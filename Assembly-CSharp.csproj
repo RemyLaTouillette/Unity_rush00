@@ -6,7 +6,7 @@
 	<ProductVersion>10.0.20506</ProductVersion>
 	<SchemaVersion>2.0</SchemaVersion>
 	<RootNamespace></RootNamespace>
-	<ProjectGuid>{9A4FAF9C-1318-64B8-6E23-05E79FCE53CF}</ProjectGuid>
+	<ProjectGuid>{3629047D-F7CD-822A-1F60-750F1F5ACCA9}</ProjectGuid>
 	<OutputType>Library</OutputType>
 	<AppDesignerFolder>Properties</AppDesignerFolder>
 	<AssemblyName>Assembly-CSharp</AssemblyName>
@@ -52,6 +52,10 @@
      <Compile Include="Assets\Scripts\objectScript.cs" />
      <Compile Include="Assets\Scripts\playerController.cs" />
      <Compile Include="Assets\Scripts\playerControllerTest.cs" />
+     <Compile Include="Assets\Scripts\title_menu\Title.cs" />
+     <Compile Include="Assets\Scripts\title_menu\bg_animation.cs" />
+     <Compile Include="Assets\Scripts\title_menu\bg_motif.cs" />
+     <Compile Include="Assets\Scripts\title_menu\menuScript.cs" />
      <Compile Include="Assets\Scripts\uiManagerScript.cs" />
      <Compile Include="Assets\Scripts\weaponScript.cs" />
      <Compile Include="Assets\Scripts\weaponSpawnerScript.cs" />
