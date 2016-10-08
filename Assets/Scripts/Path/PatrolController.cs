@@ -6,11 +6,12 @@ public class PatrolController : MonoBehaviour {
 
 	public List<Transform> waypoints = new List<Transform>();
 	public float speed	= 1f;
+	public bool invertedWay = false;
 
+	bool backWay = false;
 	Vector2 target 		= new Vector3(-10f,-10f); 
 	int currentStep		= 0;
 	int nextStep		= 0;
-	Rigidbody2D body;
 
 	void Awake()
 	{
@@ -20,18 +21,30 @@ public class PatrolController : MonoBehaviour {
 		}
 	}
 
-	void Start()
-	{
-		//body = GetComponent<Rigidbody2D> ();
-	}
-	
 	void Update() {
 
 		float step = speed * Time.deltaTime;
 		transform.position = Vector2.MoveTowards (transform.position, waypoints[nextStep].position, step);
 
 		if (transform.position == waypoints[nextStep].position) {
-			nextStep = (nextStep == waypoints.Count -1) ? 0 : nextStep + 1;
+			if (!invertedWay)
+				nextStep = (nextStep == waypoints.Count -1) ? 0 : nextStep + 1;
+			else if (nextStep > 0 && (nextStep == waypoints.Count -1 || backWay))
+			{
+				nextStep = nextStep - 1;
+				backWay = true;
+
+			}
+			else 
+			{
+				nextStep = nextStep + 1;
+				backWay = false;
+			}
+
+			if (nextStep < 0)
+				nextStep = 0;
+			else if (nextStep > waypoints.Count - 1)
+				nextStep = waypoints.Count - 1;
 		}
 
 		transform.rotation = Quaternion.LookRotation (Vector3.forward, (Vector2)transform.position - (Vector2)waypoints[nextStep].position);
