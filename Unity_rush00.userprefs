@@ -1,26 +1,11 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Fonts/shoguns_clan/README.txt">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/playerController.cs">
     <Files>
-      <File FileName="Assets/Scripts/title_menu/menuScript.cs" Line="41" Column="26" />
-      <File FileName="Assets/Scripts/title_menu/Title.cs" Line="1" Column="1" />
-      <File FileName="Assets/Fonts/justice/justice.txt" Line="1" Column="1" />
-      <File FileName="Assets/Fonts/shoguns_clan/README.txt" Line="12" Column="31" />
+      <File FileName="Assets/Scripts/noWeaponScript.cs" Line="10" Column="1" />
+      <File FileName="Assets/Scripts/playerController.cs" Line="143" Column="18" />
+      <File FileName="../../../../../nfs/2014/s/sduprey/Downloads/d03/projetD03/Assets/Scripts/gameManager.cs" Line="1" Column="1" />
     </Files>
-    <Pads>
-      <Pad Id="ProjectPad">
-        <State expanded="True">
-          <Node name="Assembly-CSharp" expanded="True">
-            <Node name="Fonts" expanded="True">
-              <Node name="justice" expanded="True" />
-              <Node name="shoguns_clan" expanded="True">
-                <Node name="README.txt" selected="True" />
-              </Node>
-            </Node>
-          </Node>
-        </State>
-      </Pad>
-    </Pads>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
