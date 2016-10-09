@@ -6,22 +6,26 @@ public class EnemyController : MonoBehaviour {
 	public Sprite[]			bodies;
 	public GameObject[]		weapons;
 
+
 	GameObject				weapon;
-	SpriteRenderer	sprite_weap;
+	public float 			range = 3.0f;
 	public float			speed = 2.0f;
 
-	public bool				isAlive = true;
-	public static int		maxHp = 2;
-	int						hp;
+	bool			isAlive = true;
+	static int		maxHp = 2;
+	int				hp;
 	
 	Rigidbody2D	ctrl;
 	GameObject	feet;
 
 	[HideInInspector] public enum Status {idle, patrol, hunting, search, back, follow};
-	[HideInInspector] public Status currentStatus = Status.idle;
+	public Status currentStatus = Status.idle;
 	[HideInInspector] public Vector2 startPosition;
 	[HideInInspector] public Status startStatus;
-	public bool detectPlayer = false;
+
+	GameObject targetDetected = null;
+	float 	targetDistance;
+	Vector2 targetPosition;
 	
 	// Variables
 
@@ -40,15 +44,18 @@ public class EnemyController : MonoBehaviour {
 		weapon = weapons[Random.Range (0, weapons.Length)];
 		ctrl = GetComponent<Rigidbody2D> ();
 		feet = transform.Find("Feet").gameObject;
-		sprite_weap = transform.Find ("Weapon").gameObject.GetComponent<SpriteRenderer> ();
-		EquipWeapon (weapon);
+		//weapon = transform.Find ("Weapon").gameObject.GetComponent<enemyWeaponScript> ();
 	}
 
 	void Update () {
 
-		if (detectPlayer) {
-			currentStatus = EnemyController.Status.follow;
+		if (targetDetected != null) {
+			targetDistance = Vector2.Distance((Vector2)targetDetected.transform.position, (Vector2)transform.position);
+			//if (playerDistance < range) <---------------------SHOOT HERE 
+			//	try To shoot ???
 		}
+		if (currentStatus == Status.follow && targetDetected != null && (Vector2)targetDetected.transform.position != targetPosition && targetDistance > range)
+			GetComponent<HuntingController> ().GoToTarget ((Vector2)targetDetected.transform.position);
 
 		if (hp == 0 && isAlive == true)
 		{			
@@ -65,21 +72,26 @@ public class EnemyController : MonoBehaviour {
 	{
 		feet.GetComponent<Animator> ().SetFloat ("speed", 0.0f);		
 	}
-	
-	public void EquipWeapon(GameObject weapon) {
-		//transform.Find("Weapon").gameObject = weapon;
-		//this.weapon = GameObject.Instantiate(weapon);
-		this.weapon = weapon;
-		sprite_weap.sprite = weapon.GetComponent<weaponScript> ().sprite;
-		//weapon.GetComponent<weaponScript> ().last_shoot = 0.0f;
+
+	public void DetectPlayer(GameObject player)
+	{
+		targetDetected = player;
+		targetPosition = targetDetected.transform.position;
+		currentStatus = Status.follow;
+		GetComponent<HuntingController> ().GoToTarget ((Vector2)targetPosition);
 	}
-	
+
+	public void lostDetection(Vector2 position)
+	{
+		targetDetected = null;
+		Alerted (position);
+	}
+
 	public void Alerted(Vector2 target)
 	{
 		currentStatus = Status.hunting;
 		GetComponent<HuntingController> ().GoToTarget (target);
 	}
-
 
 	public void Lookat(Vector2 at)
 	{
@@ -91,6 +103,13 @@ public class EnemyController : MonoBehaviour {
 		isAlive = false;
 		Debug.Log("ARGH");
 		Destroy(gameObject);
+	}
+
+	public bool isInRange()
+	{
+		if (targetDetected != null && targetDistance < range)
+			return true;
+		return false;
 	}
 
 

@@ -45,16 +45,18 @@ public class HuntingController : MonoBehaviour {
 
 	void Update() {
 	
-		if (nextStep != -1 && (self.currentStatus == EnemyController.Status.hunting || self.currentStatus == EnemyController.Status.back)) {
+		if (nextStep != -1 && (self.currentStatus == EnemyController.Status.hunting || self.currentStatus == EnemyController.Status.follow || self.currentStatus == EnemyController.Status.back)) {
 			if (waypoints != null && waypoints.Count > 0 && nextStep >= 0 && nextStep < waypoints.Count)
 			{
 				self.isMoving();
 				if((Vector2)transform.position != waypoints[nextStep])
 					transform.position = Vector2.MoveTowards (transform.position, waypoints[nextStep], self.speed * 1.5f * Time.deltaTime);
 				else
-				{					
+				{
+					if (self.currentStatus == EnemyController.Status.follow && self.isInRange())
+						nextStep = -2;
 					nextStep++;
-					if (nextStep < waypoints.Count)
+					if (nextStep < waypoints.Count - 1)
 						self.Lookat((Vector2)transform.position - (Vector2)waypoints [nextStep]);
 				}
 			}
@@ -68,6 +70,9 @@ public class HuntingController : MonoBehaviour {
 				case EnemyController.Status.back:
 					self.currentStatus = self.startStatus;
 					break;
+				case EnemyController.Status.follow:
+					self.currentStatus = EnemyController.Status.search;
+					break;
 				}
 				self.isStaying();
 			}
@@ -76,8 +81,6 @@ public class HuntingController : MonoBehaviour {
 			clearHunting ();
 			StartCoroutine(LookatCoroutine());
 			self.currentStatus = EnemyController.Status.back;
-			
-
 		}
 
 		if ((self.currentStatus == EnemyController.Status.idle || self.currentStatus == EnemyController.Status.patrol) && nextStep != -1)
@@ -111,7 +114,7 @@ public class HuntingController : MonoBehaviour {
 	}
 	
 	public void GoToTarget(Vector2 target)
-	{
+	{;
 		if (this.target == target)
 			return;
 		clearHunting ();
