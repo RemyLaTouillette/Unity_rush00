@@ -3,6 +3,7 @@ Temp/
 Obj/
 UnityGenerated/
 Library/
+*.meta
 Assets/AssetStoreTools*
 
 .DS_Store
