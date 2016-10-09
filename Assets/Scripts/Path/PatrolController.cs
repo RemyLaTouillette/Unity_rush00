@@ -7,9 +7,8 @@ public class PatrolController : MonoBehaviour {
 	public List<Transform> waypoints = new List<Transform>();
 	public bool invertedWay = false;
 
-	bool backWay = false;
-	int currentStep		= 0;
-	int nextStep		= 0;
+	bool backWay 	= false;
+	int nextStep	= 0;
 	
 	EnemyController self;
 
