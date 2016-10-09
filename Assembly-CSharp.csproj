@@ -6,7 +6,7 @@
 	<ProductVersion>10.0.20506</ProductVersion>
 	<SchemaVersion>2.0</SchemaVersion>
 	<RootNamespace></RootNamespace>
-	<ProjectGuid>{34A7C307-B02A-83F3-A85E-3E99F0D818A9}</ProjectGuid>
+	<ProjectGuid>{3629047D-F7CD-822A-1F60-750F1F5ACCA9}</ProjectGuid>
 	<OutputType>Library</OutputType>
 	<AppDesignerFolder>Properties</AppDesignerFolder>
 	<AssemblyName>Assembly-CSharp</AssemblyName>
@@ -45,12 +45,19 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\Scripts\EnemyController.cs" />
+     <Compile Include="Assets\Scripts\Path\HuntingController.cs" />
+     <Compile Include="Assets\Scripts\Path\NoiseSource.cs" />
+     <Compile Include="Assets\Scripts\Path\PatrolController.cs" />
+     <Compile Include="Assets\Scripts\Path\Waypoint.cs" />
      <Compile Include="Assets\Scripts\Weapon\EquipedBullet.cs" />
      <Compile Include="Assets\Scripts\Weapon\EquipedWeaponScript.cs" />
      <Compile Include="Assets\Scripts\WeaponBox\WeaponBoxScript.cs" />
      <Compile Include="Assets\Scripts\bulletScript.cs" />
      <Compile Include="Assets\Scripts\cameraScript.cs" />
+     <Compile Include="Assets\Scripts\enemyVisualDetectionScript.cs" />
      <Compile Include="Assets\Scripts\gameManagerScript.cs" />
+     <Compile Include="Assets\Scripts\map_door.cs" />
      <Compile Include="Assets\Scripts\noWeaponScript.cs" />
      <Compile Include="Assets\Scripts\objectScript.cs" />
      <Compile Include="Assets\Scripts\playerBulletScript.cs" />
@@ -65,16 +72,22 @@
      <Compile Include="Assets\Scripts\uiManagerScript.cs" />
      <Compile Include="Assets\Scripts\weaponScript.cs" />
      <Compile Include="Assets\Scripts\weaponSpawnerScript.cs" />
+     <None Include="Assets\Sprites\README.txt" />
      <None Include="Assets\Fonts\friday13\Font License.txt" />
      <None Include="Assets\Fonts\d3digitalism\Read Me.txt" />
      <None Include="Assets\Fonts\shoguns_clan\README.txt" />
      <None Include="Assets\Fonts\justice\justice.txt" />
-     <None Include="Assets\Sprites\README.txt" />
+ <Reference Include="UnityEngine.Analytics">
+ <HintPath>/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/UnityAnalytics/UnityEngine.Analytics.dll</HintPath>
+ </Reference>
  <Reference Include="UnityEngine.Networking">
  <HintPath>/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/Networking/UnityEngine.Networking.dll</HintPath>
  </Reference>
  <Reference Include="UnityEngine.UI">
  <HintPath>/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
+ </Reference>
+ <Reference Include="UnityEngine.Advertisements">
+ <HintPath>/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/Advertisements/UnityEngine.Advertisements.dll</HintPath>
  </Reference>
  <Reference Include="UnityEditor.iOS.Extensions.Xcode">
  <HintPath>/Applications/Unity/Unity.app/Contents/PlaybackEngines/iOSSupport/UnityEditor.iOS.Extensions.Xcode.dll</HintPath>
