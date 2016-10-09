@@ -11,13 +11,15 @@ public class EnemyController : MonoBehaviour {
 	public GameObject		punch;
 	public SpriteRenderer	sprite_weap;
 	public float			speed = 6f;
-	public Vector3			lookAt ;
+	public Vector3			lookAt;
 	
 	Rigidbody2D	ctrl;
 	GameObject	feet;
 
-	[HideInInspector] public enum Status {idle, patrol, hunting};
+	[HideInInspector] public enum Status {idle, patrol, hunting, search, back};
 	[HideInInspector] public Status currentStatus = Status.idle;
+	[HideInInspector] public Vector2 startPosition;
+	[HideInInspector] public Status startStatus;
 	
 	// Variables
 
@@ -25,6 +27,8 @@ public class EnemyController : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		startPosition = (Vector2)transform.position;
+		startStatus = currentStatus;
 		SpriteRenderer[] children = gameObject.GetComponentsInChildren<SpriteRenderer>();
 		foreach (SpriteRenderer child in children)
 			if (child.tag == "Head")
@@ -38,13 +42,13 @@ public class EnemyController : MonoBehaviour {
 	}
 
 	public void isMoving()
-	{
+	{	
 		feet.GetComponent<Animator> ().SetFloat ("speed", currentStatus == Status.patrol ? speed / 2.0f : speed);
 	}
 
 	public void isStaying()
 	{
-		feet.GetComponent<Animator> ().Stop ();
+		feet.GetComponent<Animator> ().SetFloat ("speed", 0.0f);		
 	}
 	
 	public void EquipWeapon(GameObject weapon) {
