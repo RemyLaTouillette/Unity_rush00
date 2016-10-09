@@ -2,21 +2,22 @@
 using System.Collections;
 
 public class playerController : MonoBehaviour {
-	
-	// GameObject
-	public GameObject		weapon;
-	public GameObject		obj;
-	public noWeaponScript	punch;
-	public SpriteRenderer	sprite_weap;
 
-	private Rigidbody2D	ctrl;
-	private GameObject	feet;
+	
+	private GameObject			box;
+
+	private playerWeaponScript	weap;
+	private SpriteRenderer		sr;
+	private noWeaponScript		punch;
+	private Rigidbody2D			ctrl;
+	private GameObject			feet;
+	private GameObject			bullet;
 	
 	// Variables
 	private float	speed;
 	private float	energy;
 	private bool	canDash;
-	private Vector3	direction;
+	private Vector2	direction;
 	private bool	maxPayne;
 	
 	
@@ -25,17 +26,23 @@ public class playerController : MonoBehaviour {
 		// Init GameObject
 		ctrl = GetComponent<Rigidbody2D> ();
 		feet = transform.Find("Feet").gameObject;
-		sprite_weap = transform.Find ("Weapon").gameObject.GetComponent<SpriteRenderer> ();
+		//sprite_weap = transform.Find ("Weapon").gameObject.GetComponent<SpriteRenderer> ();
 		punch = transform.Find ("Punch").GetComponent<noWeaponScript> ();
-
+		weap = transform.Find ("Weapon").GetComponent<playerWeaponScript>();
+		sr = weap.GetComponent<SpriteRenderer> ();
+		box = null;
 		// Init variables
 		speed = 6f;
 		energy = 100f;
 		canDash = true;
 		maxPayne = true;
 
+		if (box == null) {
+			Debug.Log ("Cool");
+		}
+
 		//EquipWeapon (weapon);
-		UnequipWeapon ();
+		//UnequipWeapon ();
 	}
 	
 	// Update is called once per frame
@@ -46,28 +53,22 @@ public class playerController : MonoBehaviour {
 
 		//
 		if (Input.GetButton ("Fire1")) {
-			if (weapon == null) {
+			if (weap.isEquiped) {
+				weap.Shoot(direction, transform.localRotation);
+			} else
 				Punch();
-			} else {
-				Vector3 v = direction;
-				Vector3 p = transform.Find ("Spawn").gameObject.transform.position;
-				weapon.GetComponent<weaponScript>().TryToShoot(p, v, Quaternion.identity);
-			}
-			//Debug.Log("Try to shoot");
 		}
 		if (Input.GetButtonDown ("Fire2")) {
-			Vector3 v = direction;
-			Vector3 p = transform.Find ("Spawn").gameObject.transform.position;
-
-
-			//Debug.Log("Try to drop weapon");
-			if (obj != null) {
-				GameObject b = (GameObject)Instantiate(obj, p, Quaternion.identity);
-				b.GetComponent<Rigidbody2D>().AddForce(v * 300f);
-				b.GetComponent<Rigidbody2D>().AddTorque(-20f);
-
-				UnequipWeapon();
-
+			if (box != null) {
+				box.transform.position = transform.localPosition;
+				box.SetActive(true);
+				box.GetComponent<Rigidbody2D>().AddForce(direction * 300f);
+				box.GetComponent<Rigidbody2D>().AddTorque(-20f);
+				box = null;
+				sr.sprite = null;
+				GameObject.Destroy(weap.bullet);
+				weap.DropWeapon();
+				//UnequipWeapon();
 			}
 		}
 
@@ -77,12 +78,33 @@ public class playerController : MonoBehaviour {
 		if (Input.GetKeyDown (KeyCode.E)) {
 			Debug.Log ("Try to get weapon");
 
-			RaycastHit2D[] hits = Physics2D.RaycastAll(transform.position, transform.position);
-			if (hits.Length > 1) {
-				foreach (RaycastHit2D hit in hits) {
-					if (hit.collider.tag == "Weapon") {
-						//EquipWeapon(hit.collider.gameObject);
-						//GameObject.Destroy(hit.collider.gameObject);
+			if (!weap.isEquiped) {
+				RaycastHit2D[] hits = Physics2D.RaycastAll(transform.position, transform.position);
+				if (hits.Length > 1) {
+					foreach (RaycastHit2D hit in hits) {
+						if (hit.collider.tag == "Weapon") {
+							Debug.Log ("get: " + hit.collider.name);
+
+
+							//weap = hit.collider.gameObject.GetComponent<weaponScript>();
+							//weap = weaponScript.Instantiate(g.GetComponent<weaponScript>());
+
+
+							//Debug.Log ("ammo: " + weap.ammo);
+							box = hit.collider.gameObject;
+							weap.GetWeapon(box);
+							transform.Find ("Weapon").GetComponent<SpriteRenderer>().sprite = weap.sprite;
+							this.box = box;
+							box.SetActive(false);
+							//GameObject.Destroy(hit.collider.gameObject);
+							//Debug.Log ("verif: " + weap.ammo);
+							//weap.isEquiped = true;
+
+							//sprite.sprite = weap.sprite;
+							//EquipWeapon(hit.collider.gameObject);
+							//GameObject.Destroy(hit.collider.gameObject);
+							break;
+						}
 					}
 				}
 			}
@@ -104,10 +126,21 @@ public class playerController : MonoBehaviour {
 		move *= speed;
 		ctrl.velocity = Vector2.ClampMagnitude (move, speed);
 		// Mouse movement
+
 		Vector3 lookAt = transform.position - Camera.main.ScreenToWorldPoint (Input.mousePosition);
+
+		//Vector3 lookAt = transform.localPosition - Camera.main.ScreenToWorldPoint (Input.mousePosition);
+
+
+
 		float angle = Mathf.Atan2(lookAt.y, lookAt.x) * Mathf.Rad2Deg - 90f;
 		ctrl.transform.rotation = Quaternion.Euler(new Vector3(0f, 0f, angle));
-		direction = Vector3.Normalize (-lookAt);
+
+		//direction = Vector3.Normalize (new Vector3(lookAt.x, lookAt.y, angle));
+		direction = new Vector2 (-lookAt.x, -lookAt.y).normalized;
+
+
+		//Debug.Log (direction.magnitude);
 		// Feet's animation
 		if (ctrl.velocity.magnitude == 0)
 			feet.GetComponent<Animator> ().Rebind ();
@@ -151,17 +184,11 @@ public class playerController : MonoBehaviour {
 		punch.TryToPunch ();
 	}
 
-	public void EquipWeapon(GameObject weapon) {
-		//transform.Find("Weapon").gameObject = weapon;
-		//this.weapon = GameObject.Instantiate(weapon);
-		this.weapon = weapon;
-		sprite_weap.sprite = weapon.GetComponent<weaponScript> ().sprite;
-		//weapon.GetComponent<weaponScript> ().last_shoot = 0.0f;
+	public void EquipWeapon() {
+
 	}
 
 	public void UnequipWeapon() {
-		this.weapon = null;
-		sprite_weap.sprite = null;
-		obj = null;
+
 	}
 }

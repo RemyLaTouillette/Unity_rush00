@@ -45,13 +45,19 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\Scripts\Weapon\EquipedBullet.cs" />
+     <Compile Include="Assets\Scripts\Weapon\EquipedWeaponScript.cs" />
+     <Compile Include="Assets\Scripts\WeaponBox\WeaponBoxScript.cs" />
      <Compile Include="Assets\Scripts\bulletScript.cs" />
      <Compile Include="Assets\Scripts\cameraScript.cs" />
      <Compile Include="Assets\Scripts\gameManagerScript.cs" />
      <Compile Include="Assets\Scripts\noWeaponScript.cs" />
      <Compile Include="Assets\Scripts\objectScript.cs" />
+     <Compile Include="Assets\Scripts\playerBulletScript.cs" />
      <Compile Include="Assets\Scripts\playerController.cs" />
      <Compile Include="Assets\Scripts\playerControllerTest.cs" />
+     <Compile Include="Assets\Scripts\playerWeaponScript.cs" />
+     <Compile Include="Assets\Scripts\testWeaponObj.cs" />
      <Compile Include="Assets\Scripts\title_menu\Title.cs" />
      <Compile Include="Assets\Scripts\title_menu\bg_animation.cs" />
      <Compile Include="Assets\Scripts\title_menu\bg_motif.cs" />
@@ -64,17 +70,11 @@
      <None Include="Assets\Fonts\shoguns_clan\README.txt" />
      <None Include="Assets\Fonts\justice\justice.txt" />
      <None Include="Assets\Sprites\README.txt" />
- <Reference Include="UnityEngine.Analytics">
- <HintPath>/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/UnityAnalytics/UnityEngine.Analytics.dll</HintPath>
- </Reference>
  <Reference Include="UnityEngine.Networking">
  <HintPath>/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/Networking/UnityEngine.Networking.dll</HintPath>
  </Reference>
  <Reference Include="UnityEngine.UI">
  <HintPath>/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
- </Reference>
- <Reference Include="UnityEngine.Advertisements">
- <HintPath>/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/Advertisements/UnityEngine.Advertisements.dll</HintPath>
  </Reference>
  <Reference Include="UnityEditor.iOS.Extensions.Xcode">
  <HintPath>/Applications/Unity/Unity.app/Contents/PlaybackEngines/iOSSupport/UnityEditor.iOS.Extensions.Xcode.dll</HintPath>

@@ -3,9 +3,10 @@ using System.Collections;
 
 public class weaponScript : MonoBehaviour {
 
+//	public string		weapName;
 	public Sprite		sprite;
 	public GameObject	projectile;
-
+	
 	public bool			melee;
 	public int			ammoMax;
 	public int			ammo;
@@ -14,8 +15,11 @@ public class weaponScript : MonoBehaviour {
 
 	private float		last_shoot = 0f;
 
+	public bool		isEquiped;
+
 	// Use this for initialization
 	void Start () {
+		isEquiped = false;
 		last_shoot = Time.time;
 	}
 	

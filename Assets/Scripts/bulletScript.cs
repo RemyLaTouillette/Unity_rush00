@@ -11,6 +11,8 @@ public class bulletScript : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		t = Time.time + range;
+		Debug.Log (GetComponent<Rigidbody2D> ().velocity.x);
+		Debug.Log (GetComponent<Rigidbody2D> ().velocity.y);
 	}
 	
 	// Update is called once per frame

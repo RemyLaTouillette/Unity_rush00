@@ -3,7 +3,6 @@ using System.Collections;
 
 public class objectScript : MonoBehaviour {
 
-	public Sprite		sprite;
 	private Rigidbody2D rb2d;
 
 	// Use this for initialization
