@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class ennemyController_ajodin : MonoBehaviour {
+public class EnemyController : MonoBehaviour {
 	public Sprite[]			heads;
 	public Sprite[]			bodies;
 	public GameObject[]		weapons;
@@ -10,11 +10,14 @@ public class ennemyController_ajodin : MonoBehaviour {
 	public GameObject		obj;
 	public GameObject		punch;
 	public SpriteRenderer	sprite_weap;
-	public float			speed = 6F;
+	public float			speed = 6f;
 	public Vector3			lookAt ;
 	
-	private Rigidbody2D	ctrl;
-	private GameObject	feet;
+	Rigidbody2D	ctrl;
+	GameObject	feet;
+
+	[HideInInspector] public enum Status {idle, patrol, hunting};
+	[HideInInspector] public Status currentStatus = Status.idle;
 	
 	// Variables
 
@@ -33,25 +36,15 @@ public class ennemyController_ajodin : MonoBehaviour {
 		sprite_weap = transform.Find ("Weapon").gameObject.GetComponent<SpriteRenderer> ();
 		EquipWeapon (weapon);
 	}
-	
-	void Update () {
 
+	public void isMoving()
+	{
+		feet.GetComponent<Animator> ().SetFloat ("speed", currentStatus == Status.patrol ? speed / 2.0f : speed);
 	}
-	
-	void BasicMovement() {
-		// WASD movements
-		Vector2 move = new Vector2 (Input.GetAxisRaw ("Horizontal"), Input.GetAxisRaw ("Vertical"));
-		move *= speed;
-		ctrl.velocity = Vector2.ClampMagnitude (move, speed);
-		// Mouse movement
 
-		//TODO : Reimplement lookAt to Follow the player
-
-		float angle = Mathf.Atan2(lookAt.y, lookAt.x) * Mathf.Rad2Deg - 90f;
-		ctrl.transform.rotation = Quaternion.Euler(new Vector3(0f, 0f, angle));
-		direction = Vector3.Normalize (-lookAt);
-		// Feet's animation
-		feet.GetComponent<Animator> ().SetFloat ("speed", ctrl.velocity.magnitude / 3f);
+	public void isStaying()
+	{
+		feet.GetComponent<Animator> ().Stop ();
 	}
 	
 	public void EquipWeapon(GameObject weapon) {
@@ -60,6 +53,18 @@ public class ennemyController_ajodin : MonoBehaviour {
 		this.weapon = weapon;
 		sprite_weap.sprite = weapon.GetComponent<weaponScript> ().sprite;
 		//weapon.GetComponent<weaponScript> ().last_shoot = 0.0f;
+	}
+	
+	public void Alerted(Vector2 target)
+	{
+		currentStatus = Status.hunting;
+		GetComponent<HuntingController> ().GoToTarget (target);
+	}
+
+
+	public void Lookat(Vector2 at)
+	{
+		transform.rotation = Quaternion.LookRotation (Vector3.forward, at);
 	}
 
 }
