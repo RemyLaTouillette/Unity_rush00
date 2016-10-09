@@ -9,14 +9,43 @@ public class HuntingController : MonoBehaviour {
 	EnemyController self;
 
 	bool onTheBackWay = false;
+	bool running = true;
+	IEnumerator routine;
 
 	void Awake()
 	{
 		self = gameObject.GetComponent<EnemyController> ();
 	}
 
+	IEnumerator LookatCoroutine()
+	{
+		for (int i=0; i<5; i++) {
+			switch(i)
+			{
+				case 0:
+					self.Lookat(self.transform.rotation * Vector3.left);
+					break;
+				case 1:
+					self.Lookat(self.transform.rotation * Vector3.right);
+					break;
+				case 2:
+					self.Lookat(self.transform.rotation * Vector3.down);
+					break;
+				case 3:
+					self.Lookat(self.transform.rotation * Vector3.up);
+					break;
+				case 4:
+					if (self.currentStatus == EnemyController.Status.back)
+						GoToTarget(self.startPosition);
+					break;
+			}
+			yield return new WaitForSeconds (1);
+		}
+	}
+
 	void Update() {
-		if (self.currentStatus == EnemyController.Status.hunting || self.currentStatus == EnemyController.Status.back) {
+	
+		if (nextStep != -1 && (self.currentStatus == EnemyController.Status.hunting || self.currentStatus == EnemyController.Status.back)) {
 			if (waypoints != null && waypoints.Count > 0 && nextStep >= 0 && nextStep < waypoints.Count)
 			{
 				self.isMoving();
@@ -37,25 +66,22 @@ public class HuntingController : MonoBehaviour {
 					self.currentStatus = EnemyController.Status.search;
 					break;
 				case EnemyController.Status.back:
-					self.currentStatus = EnemyController.Status.idle;
+					self.currentStatus = self.startStatus;
 					break;
 				}
 				self.isStaying();
 			}
 		}
-		if (self.currentStatus == EnemyController.Status.search) {
+		else if (self.currentStatus == EnemyController.Status.search) {
+			clearHunting ();
+			StartCoroutine(LookatCoroutine());
+			self.currentStatus = EnemyController.Status.back;
+			
+
 		}
 
 		if ((self.currentStatus == EnemyController.Status.idle || self.currentStatus == EnemyController.Status.patrol) && nextStep != -1)
 			clearHunting ();
-
-		/*if (self.currentStatus == EnemyController.Status.back && onTheBackWay == false) {
-			onTheBackWay = true;
-			target.x = -1000.0f;
-			nextStep = 0;
-			waypoints.Reverse();
-			//self.Lookat((Vector2)transform.position - (Vector2)waypoints [nextStep]);
-		}*/
 	}
 
 	void clearHunting()

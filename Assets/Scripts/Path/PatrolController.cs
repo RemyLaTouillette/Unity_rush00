@@ -9,7 +9,7 @@ public class PatrolController : MonoBehaviour {
 
 	bool backWay 	= false;
 	int nextStep	= 0;
-	
+
 	EnemyController self;
 
 	
@@ -24,7 +24,7 @@ public class PatrolController : MonoBehaviour {
 	}
 	
 	void Update() {
-		
+
 		if (self.currentStatus == EnemyController.Status.patrol) {
 			
 			if(waypoints [nextStep].position != transform.position)

@@ -6,20 +6,22 @@ public class EnemyController : MonoBehaviour {
 	public Sprite[]			bodies;
 	public GameObject[]		weapons;
 
-	public GameObject		weapon;
-	public GameObject		obj;
-	public GameObject		punch;
-	public SpriteRenderer	sprite_weap;
-	public float			speed = 6f;
-	public Vector3			lookAt;
+	GameObject				weapon;
+	SpriteRenderer	sprite_weap;
+	public float			speed = 2.0f;
+
+	public bool				isAlive = true;
+	public static int		maxHp = 2;
+	int						hp;
 	
 	Rigidbody2D	ctrl;
 	GameObject	feet;
 
-	[HideInInspector] public enum Status {idle, patrol, hunting, search, back};
+	[HideInInspector] public enum Status {idle, patrol, hunting, search, back, follow};
 	[HideInInspector] public Status currentStatus = Status.idle;
 	[HideInInspector] public Vector2 startPosition;
 	[HideInInspector] public Status startStatus;
+	public bool detectPlayer = false;
 	
 	// Variables
 
@@ -27,6 +29,7 @@ public class EnemyController : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		hp = maxHp;
 		startPosition = (Vector2)transform.position;
 		startStatus = currentStatus;
 		SpriteRenderer[] children = gameObject.GetComponentsInChildren<SpriteRenderer>();
@@ -39,6 +42,18 @@ public class EnemyController : MonoBehaviour {
 		feet = transform.Find("Feet").gameObject;
 		sprite_weap = transform.Find ("Weapon").gameObject.GetComponent<SpriteRenderer> ();
 		EquipWeapon (weapon);
+	}
+
+	void Update () {
+
+		if (detectPlayer) {
+			currentStatus = EnemyController.Status.follow;
+		}
+
+		if (hp == 0 && isAlive == true)
+		{			
+			dieNow ();
+		}
 	}
 
 	public void isMoving()
@@ -70,5 +85,13 @@ public class EnemyController : MonoBehaviour {
 	{
 		transform.rotation = Quaternion.LookRotation (Vector3.forward, at);
 	}
+
+	public void dieNow()
+	{
+		isAlive = false;
+		Debug.Log("ARGH");
+		Destroy(gameObject);
+	}
+
 
 }
