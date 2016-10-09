@@ -29,7 +29,8 @@ public class weaponScript : MonoBehaviour {
 	}
 
 	public void TryToShoot(Vector3 pos, Vector3 dir, Quaternion ori) {
-		if (Time.time > last_shoot) {
+		if (Time.time > last_shoot && ammo > 0) {
+			ammo--;
 			GameObject b = (GameObject)Instantiate(projectile, pos,  ori);
 			b.GetComponent<Rigidbody2D>().AddForce(dir * power);
 			last_shoot = Time.time + fire_rate;

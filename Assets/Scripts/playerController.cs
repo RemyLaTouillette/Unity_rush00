@@ -62,7 +62,7 @@ public class playerController : MonoBehaviour {
 			if (box != null) {
 				box.transform.position = transform.localPosition;
 				box.SetActive(true);
-				box.GetComponent<Rigidbody2D>().AddForce(direction * 300f);
+				box.GetComponent<Rigidbody2D>().AddForce(direction * weap.power);
 				box.GetComponent<Rigidbody2D>().AddTorque(-20f);
 				box = null;
 				sr.sprite = null;
